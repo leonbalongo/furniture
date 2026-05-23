@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Furniture & Interiors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gold:#d4a843;--gold2:#f0c96a;--dark:#0d0c0a;--dark2:#161410;--dark3:#1e1b16;
+  --cream:#f7f2ea;--cream2:#efe8d8;--muted:#8a8070;--wa:#25D366;
+  --r:0;--ease:cubic-bezier(.77,0,.18,1)
+}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'Outfit',sans-serif;background:var(--dark);color:var(--cream);overflow-x:hidden;cursor:none}
+
+/* CUSTOM CURSOR */
+.cur{position:fixed;width:10px;height:10px;border-radius:50%;background:var(--gold);pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;mix-blend-mode:difference}
+.cur2{position:fixed;width:36px;height:36px;border-radius:50%;border:1px solid rgba(212,168,67,.5);pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:all .12s var(--ease)}
+body:has(.btn:hover) .cur,.cur.hover{width:60px;height:60px;background:rgba(212,168,67,.15)}
+
+/* LOADER */
+.loader{position:fixed;inset:0;background:var(--dark);z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s,visibility .6s}
+.loader.done{opacity:0;visibility:hidden}
+.loader-logo{font-family:'Playfair Display',serif;font-size:3rem;color:var(--gold);letter-spacing:6px;animation:pulse 1.5s ease-in-out infinite}
+.loader-bar-wrap{width:200px;height:2px;background:rgba(212,168,67,.2);margin-top:32px;overflow:hidden}
+.loader-bar{height:100%;background:var(--gold);width:0;animation:load 1.8s var(--ease) forwards}
+@keyframes load{to{width:100%}}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:900;padding:24px 48px;display:flex;align-items:center;justify-content:space-between;transition:all .4s}
+nav.scrolled{padding:14px 48px;background:rgba(13,12,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(212,168,67,.1)}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--gold);letter-spacing:4px;text-decoration:none;cursor:pointer}
+.nav-menu{display:flex;gap:40px;list-style:none}
+.nav-menu a{font-size:.75rem;letter-spacing:2.5px;text-transform:uppercase;color:rgba(247,242,234,.55);text-decoration:none;cursor:pointer;transition:color .25s;font-weight:500;position:relative}
+.nav-menu a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--gold);transition:width .3s}
+.nav-menu a:hover,.nav-menu a.active{color:var(--gold)}
+.nav-menu a:hover::after,.nav-menu a.active::after{width:100%}
+.nav-wa{display:flex;align-items:center;gap:8px;background:var(--wa);color:#fff;padding:10px 20px;font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;text-decoration:none;cursor:pointer;transition:all .3s;border:none}
+.nav-wa:hover{background:#1ebe5d;transform:translateY(-2px)}
+.ham{display:none;flex-direction:column;gap:5px;cursor:pointer;z-index:901}
+.ham span{width:22px;height:1.5px;background:var(--gold);transition:all .3s}
+
+/* MOBILE NAV OVERLAY */
+.mob-nav{position:fixed;inset:0;background:var(--dark);z-index:850;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:48px;opacity:0;pointer-events:none;transition:opacity .4s}
+.mob-nav.open{opacity:1;pointer-events:all}
+.mob-nav a{font-family:'Playfair Display',serif;font-size:2.8rem;font-style:italic;color:rgba(247,242,234,.6);text-decoration:none;cursor:pointer;transition:color .2s}
+.mob-nav a:hover{color:var(--gold)}
+
+/* PAGES */
+.page{display:none}
+.page.active{display:block;animation:pageIn .7s var(--ease)}
+@keyframes pageIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* ══════ HERO ══════ */
+.hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center}
+.hero-bg{position:absolute;inset:0}
+.hero-bg img{width:100%;height:100%;object-fit:cover;animation:zoomIn 8s ease forwards}
+@keyframes zoomIn{from{transform:scale(1.08)}to{transform:scale(1)}}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,rgba(13,12,10,.95) 40%,rgba(13,12,10,.45) 75%,rgba(13,12,10,.2) 100%)}
+.hero-content{position:relative;z-index:2;padding:0 80px;max-width:780px}
+.hero-tag{font-size:.68rem;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:28px;display:flex;align-items:center;gap:16px;opacity:0;animation:slideUp .8s .5s var(--ease) forwards}
+.hero-tag::before{content:'';width:40px;height:1px;background:var(--gold)}
+.hero-h1{font-family:'Playfair Display',serif;font-size:clamp(3.2rem,6vw,6rem);font-weight:700;line-height:1.05;margin-bottom:32px;opacity:0;animation:slideUp .9s .7s var(--ease) forwards}
+.hero-h1 span{color:var(--gold);font-style:italic}
+.hero-p{font-size:1.05rem;color:rgba(247,242,234,.65);line-height:1.8;max-width:480px;margin-bottom:52px;font-weight:300;opacity:0;animation:slideUp 1s .9s var(--ease) forwards}
+.hero-btns{display:flex;gap:16px;flex-wrap:wrap;opacity:0;animation:slideUp 1s 1.1s var(--ease) forwards}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:16px 36px;font-size:.78rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border:none;text-decoration:none;transition:all .3s;font-family:'Outfit',sans-serif}
+.btn-gold{background:var(--gold);color:var(--dark)}
+.btn-gold:hover{background:var(--gold2);transform:translateY(-3px);box-shadow:0 12px 40px rgba(212,168,67,.35)}
+.btn-outline{background:transparent;color:var(--cream);border:1px solid rgba(247,242,234,.3)}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-3px)}
+
+/* HERO SIDE INFO */
+.hero-side{position:absolute;right:64px;top:50%;transform:translateY(-50%);z-index:2;display:flex;flex-direction:column;gap:40px;opacity:0;animation:slideLeft .9s 1.3s var(--ease) forwards}
+@keyframes slideLeft{from{opacity:0;transform:translate(30px,-50%)}to{opacity:1;transform:translate(0,-50%)}}
+.hero-stat{text-align:center;padding:24px 28px;border:1px solid rgba(212,168,67,.2);background:rgba(13,12,10,.6);backdrop-filter:blur(10px)}
+.hero-stat-n{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:700;color:var(--gold);line-height:1}
+.hero-stat-l{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:rgba(247,242,234,.4);margin-top:6px}
+
+/* HERO SCROLL */
+.hero-scroll{position:absolute;bottom:48px;left:80px;z-index:2;display:flex;align-items:center;gap:14px;color:rgba(247,242,234,.4);font-size:.68rem;letter-spacing:3px;text-transform:uppercase;opacity:0;animation:slideUp .8s 1.5s forwards}
+.scroll-line{width:1px;height:50px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollAnim 2s ease-in-out infinite}
+@keyframes scrollAnim{0%,100%{transform:scaleY(1);opacity:1}50%{transform:scaleY(.6);opacity:.5}}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+/* ══════ CINEMATIC IMAGE REEL ══════ */
+.reel-section{padding:0;overflow:hidden;background:var(--dark);position:relative}
+.reel-section::before,.reel-section::after{content:'';position:absolute;top:0;bottom:0;width:220px;z-index:20;pointer-events:none}
+.reel-section::before{left:0;background:linear-gradient(to right,var(--dark) 30%,transparent)}
+.reel-section::after{right:0;background:linear-gradient(to left,var(--dark) 30%,transparent)}
+
+.reel-header{text-align:center;padding:100px 48px 64px;position:relative;z-index:2}
+.reel-header .overline{font-size:.68rem;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:block}
+.reel-header h2{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.4rem);font-weight:700;line-height:1.1}
+.reel-header h2 em{color:var(--gold);font-style:italic}
+.reel-header p{color:rgba(247,242,234,.45);font-size:.95rem;max-width:480px;margin:16px auto 0;font-weight:300;line-height:1.7}
+
+.reel-rows{padding-bottom:90px;display:flex;flex-direction:column;gap:14px}
+
+.reel-track{display:flex;gap:14px;width:max-content;will-change:transform}
+.reel-track.go-left{animation:goLeft var(--dur,40s) linear infinite}
+.reel-track.go-right{animation:goRight var(--dur,48s) linear infinite}
+.reel-section:hover .reel-track{animation-play-state:paused}
+
+@keyframes goLeft{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes goRight{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+
+/* THE CARD */
+.rc{
+  position:relative;flex-shrink:0;overflow:hidden;cursor:pointer;
+  border-radius:0;
+  transform-style:preserve-3d;
+  transition:transform .08s linear,box-shadow .4s,z-index 0s;
+  will-change:transform;
+}
+.rc:hover{z-index:30;box-shadow:0 0 0 1.5px var(--gold),0 28px 60px rgba(0,0,0,.7)}
+
+/* size variants */
+.rc.tall{width:220px;height:340px}
+.rc.wide{width:300px;height:260px}
+.rc.sq{width:240px;height:240px}
+
+.rc img{
+  width:100%;height:100%;object-fit:cover;
+  display:block;
+  transition:transform .7s var(--ease),filter .4s;
+  pointer-events:none;
+}
+.rc:hover img{transform:scale(1.08);filter:brightness(.65)}
+
+/* category badge top-left */
+.rc-cat{
+  position:absolute;top:12px;left:12px;
+  font-size:.55rem;letter-spacing:2.5px;text-transform:uppercase;font-weight:700;
+  padding:5px 10px;
+  z-index:3;pointer-events:none;
+  backdrop-filter:blur(6px);
+}
+.rc-cat.tv{background:rgba(74,144,226,.85);color:#c8e0ff}
+.rc-cat.kit{background:rgba(80,160,100,.85);color:#c6f0d0}
+.rc-cat.wall{background:rgba(180,90,160,.85);color:#f5d6f0}
+
+/* bottom info panel */
+.rc-panel{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:40px 18px 18px;
+  background:linear-gradient(to top,rgba(10,8,6,.95) 60%,transparent);
+  transform:translateY(12px);
+  opacity:0;
+  transition:opacity .35s,transform .35s var(--ease);
+  pointer-events:none;
+  z-index:4;
+}
+.rc:hover .rc-panel{opacity:1;transform:translateY(0);pointer-events:auto}
+.rc-panel h4{
+  font-family:'Playfair Display',serif;
+  font-size:.95rem;font-weight:400;
+  color:var(--cream);margin-bottom:10px;line-height:1.3;
+}
+.rc-panel .wa-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--wa);color:#fff;
+  font-size:.58rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;
+  padding:6px 12px;text-decoration:none;
+  transition:background .2s,transform .2s;
+}
+.rc-panel .wa-chip:hover{background:#1ebe5d;transform:translateY(-1px)}
+
+/* shimmer sweep on hover */
+.rc::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.09) 50%,transparent 60%);
+  transform:translateX(-100%);
+  transition:transform 0s;
+  pointer-events:none;z-index:5;
+}
+.rc:hover::before{transform:translateX(200%);transition:transform .7s ease}
+
+/* number watermark bottom-right */
+.rc-num{
+  position:absolute;bottom:14px;right:14px;
+  font-family:'Playfair Display',serif;
+  font-size:3.5rem;font-weight:700;
+  color:rgba(212,168,67,.12);
+  line-height:1;pointer-events:none;z-index:2;
+  transition:opacity .3s;
+}
+.rc:hover .rc-num{opacity:0}
+
+/* ══════ WHY SECTION ══════ */
+.why{padding:120px 80px;display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:center;max-width:1400px;margin:0 auto}
+.why-left .overline{font-size:.68rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+.why-left h2{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,4vw,3.6rem);font-weight:700;line-height:1.15;margin-bottom:28px}
+.why-left h2 em{color:var(--gold);font-style:italic}
+.why-left p{color:rgba(247,242,234,.55);line-height:1.9;font-size:1rem;font-weight:300;margin-bottom:40px;max-width:440px}
+.why-cards{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.why-card{background:var(--dark2);padding:36px 28px;position:relative;overflow:hidden;transition:background .3s}
+.why-card::before{content:'';position:absolute;bottom:0;left:0;width:100%;height:2px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+.why-card:hover{background:var(--dark3)}
+.why-card:hover::before{transform:scaleX(1)}
+.why-card i{font-size:1.6rem;color:var(--gold);margin-bottom:18px;display:block}
+.why-card h3{font-family:'Playfair Display',serif;font-size:1.05rem;margin-bottom:10px;font-weight:400}
+.why-card p{font-size:.85rem;color:rgba(247,242,234,.45);line-height:1.7}
+
+/* ══════ COLLECTION GRID (HOME) ══════ */
+.collections{padding:0 80px 120px;max-width:1400px;margin:0 auto}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:48px}
+.section-head h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.8rem);font-weight:700}
+.section-head h2 em{color:var(--gold);font-style:italic}
+.see-all{font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid rgba(138,128,112,.4);padding-bottom:4px;cursor:pointer;transition:color .2s,border-color .2s;font-weight:500;text-decoration:none}
+.see-all:hover{color:var(--gold);border-color:var(--gold)}
+
+/* BIG COLLECTION LAYOUT */
+.coll-grid{display:grid;gap:12px}
+.coll-grid.tv{grid-template-columns:1.6fr 1fr 1fr;grid-template-rows:320px 260px}
+.coll-grid.kitchen{grid-template-columns:1fr 1fr 1.5fr;grid-template-rows:280px 280px}
+.coll-grid.wall{grid-template-columns:1fr 1fr;grid-template-rows:340px}
+
+.coll-item{position:relative;overflow:hidden;cursor:pointer;background:#111}
+.coll-item.span2{grid-row:span 2}
+.coll-item img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease),filter .4s}
+.coll-item:hover img{transform:scale(1.07);filter:brightness(.85)}
+.coll-item-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,12,10,.85) 0%,rgba(13,12,10,.15) 50%,transparent 100%);opacity:0;transition:opacity .4s}
+.coll-item:hover .coll-item-overlay{opacity:1}
+.coll-item-info{position:absolute;bottom:0;left:0;right:0;padding:28px;transform:translateY(8px);opacity:0;transition:all .4s}
+.coll-item:hover .coll-item-info{opacity:1;transform:translateY(0)}
+.coll-item-info h4{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:6px}
+.coll-item-info p{font-size:.8rem;color:rgba(247,242,234,.65)}
+.coll-badge{position:absolute;top:16px;left:16px;background:var(--gold);color:var(--dark);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;padding:6px 12px}
+
+/* ══════ CTA BANNER ══════ */
+.cta-band{margin:0 80px 120px;background:var(--dark2);border:1px solid rgba(212,168,67,.15);padding:80px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;overflow:hidden}
+.cta-band::before{content:'"';position:absolute;top:-60px;right:60px;font-family:'Playfair Display',serif;font-size:30rem;color:rgba(212,168,67,.03);line-height:1;pointer-events:none}
+.cta-band .overline{font-size:.68rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.cta-band h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,3rem);font-weight:700;line-height:1.2;margin-bottom:20px}
+.cta-band p{color:rgba(247,242,234,.5);line-height:1.8;font-weight:300;font-size:.95rem}
+.cta-right{display:flex;flex-direction:column;gap:24px}
+.cta-wa{display:flex;align-items:center;gap:20px;background:var(--wa);padding:28px 32px;transition:all .3s;cursor:pointer;text-decoration:none}
+.cta-wa:hover{background:#1ebe5d;transform:translateX(6px)}
+.cta-wa-icon{font-size:2rem;color:#fff}
+.cta-wa-text strong{display:block;color:#fff;font-size:1rem;font-weight:600;margin-bottom:4px}
+.cta-wa-text span{font-size:.8rem;color:rgba(255,255,255,.75)}
+.cta-process{display:flex;flex-direction:column;gap:16px}
+.process-step{display:flex;align-items:center;gap:16px;padding:18px 24px;background:rgba(247,242,234,.03);border-left:2px solid var(--gold)}
+.process-step-n{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--gold);opacity:.35;min-width:36px;line-height:1}
+.process-step p{font-size:.85rem;color:rgba(247,242,234,.6);line-height:1.5}
+.process-step strong{display:block;color:var(--cream);font-size:.9rem;margin-bottom:4px;font-weight:500}
+
+/* ══════ GALLERY PAGES ══════ */
+.gallery-hero{height:45vh;position:relative;overflow:hidden;display:flex;align-items:flex-end}
+.gallery-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.gallery-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(13,12,10,1) 0%,rgba(13,12,10,.4) 60%,rgba(13,12,10,.1) 100%)}
+.gallery-hero-text{position:relative;z-index:2;padding:0 80px 60px}
+.gallery-hero-text .tag{font-size:.68rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.gallery-hero-text h1{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,5vw,5rem);font-weight:700;line-height:1.05}
+.gallery-hero-text p{color:rgba(247,242,234,.55);margin-top:12px;font-size:1rem;font-weight:300;max-width:500px}
+
+.gallery-body{padding:60px 80px 120px;max-width:1400px;margin:0 auto}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.g-card{background:var(--dark2);overflow:hidden;cursor:pointer;transition:transform .4s var(--ease),box-shadow .4s;position:relative;group:1}
+.g-card:hover{transform:translateY(-8px);box-shadow:0 30px 60px rgba(0,0,0,.4)}
+.g-card-img{width:100%;height:260px;object-fit:cover;display:block;transition:transform .6s var(--ease)}
+.g-card:hover .g-card-img{transform:scale(1.05)}
+.g-card-body{padding:28px}
+.g-card-body h3{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:400;margin-bottom:10px;color:var(--cream)}
+.g-card-body p{font-size:.83rem;color:rgba(247,242,234,.45);line-height:1.65;margin-bottom:20px}
+.g-card-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(247,242,234,.06);padding-top:18px}
+.g-wa{display:inline-flex;align-items:center;gap:8px;background:var(--wa);color:#fff;padding:10px 18px;font-size:.7rem;letter-spacing:1px;text-transform:uppercase;font-weight:600;text-decoration:none;transition:all .3s;border:none;cursor:pointer}
+.g-wa:hover{background:#1ebe5d}
+.g-view{width:36px;height:36px;border:1px solid rgba(247,242,234,.15);display:flex;align-items:center;justify-content:center;color:rgba(247,242,234,.4);cursor:pointer;transition:all .3s;font-size:.85rem;background:none}
+.g-view:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ══════ LIGHTBOX ══════ */
+.lb{display:none;position:fixed;inset:0;background:rgba(5,4,3,.97);z-index:5000;flex-direction:column;align-items:center;justify-content:center}
+.lb.on{display:flex}
+.lb-img{max-width:80vw;max-height:72vh;object-fit:contain;animation:lbIn .3s var(--ease)}
+@keyframes lbIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+.lb-info{margin-top:24px;text-align:center}
+.lb-info h3{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--cream);margin-bottom:6px}
+.lb-info p{font-size:.85rem;color:rgba(247,242,234,.45)}
+.lb-x{position:fixed;top:28px;right:36px;background:none;border:1px solid rgba(247,242,234,.2);color:var(--cream);width:48px;height:48px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;transition:all .3s}
+.lb-x:hover{background:var(--gold);border-color:var(--gold);color:var(--dark)}
+.lb-ctr{position:fixed;top:32px;left:40px;font-size:.75rem;letter-spacing:3px;color:rgba(247,242,234,.35)}
+.lb-nav{position:fixed;top:50%;left:0;right:0;display:flex;justify-content:space-between;padding:0 24px;transform:translateY(-50%);pointer-events:none}
+.lb-btn{pointer-events:auto;width:52px;height:52px;background:rgba(247,242,234,.05);border:1px solid rgba(247,242,234,.12);color:var(--cream);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;font-size:1rem}
+.lb-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--dark)}
+.lb-wa{margin-top:20px;display:inline-flex;align-items:center;gap:10px;background:var(--wa);color:#fff;padding:12px 28px;font-size:.75rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;text-decoration:none;cursor:pointer}
+
+/* ══════ FOOTER ══════ */
+footer{background:var(--dark2);border-top:1px solid rgba(212,168,67,.1);padding:90px 80px 48px}
+.foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:80px;margin-bottom:80px}
+.foot-logo{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--gold);letter-spacing:4px;margin-bottom:20px}
+.foot-tagline{font-family:'Playfair Display',serif;font-style:italic;font-size:1rem;color:rgba(247,242,234,.4);margin-bottom:24px;line-height:1.6}
+.foot-socials{display:flex;gap:10px;margin-top:28px}
+.foot-socials a{width:38px;height:38px;border:1px solid rgba(247,242,234,.1);display:flex;align-items:center;justify-content:center;color:rgba(247,242,234,.4);text-decoration:none;transition:all .3s;font-size:.9rem}
+.foot-socials a:hover{background:var(--gold);border-color:var(--gold);color:var(--dark)}
+.foot-h{font-size:.66rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:24px}
+.foot-list{list-style:none}
+.foot-list li{margin-bottom:14px;font-size:.88rem;color:rgba(247,242,234,.45)}
+.foot-list a{color:rgba(247,242,234,.45);text-decoration:none;cursor:pointer;transition:color .2s}
+.foot-list a:hover{color:var(--gold)}
+.foot-contact li{display:flex;align-items:flex-start;gap:12px}
+.foot-contact i{color:var(--gold);margin-top:3px;width:14px;font-size:.85rem}
+.foot-wa-box{background:rgba(37,211,102,.07);border:1px solid rgba(37,211,102,.2);padding:28px;margin-top:8px}
+.foot-wa-box p{font-size:.82rem;color:rgba(247,242,234,.45);margin-bottom:18px;line-height:1.6}
+.foot-wa-btn{display:inline-flex;align-items:center;gap:10px;background:var(--wa);color:#fff;padding:12px 24px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;text-decoration:none;transition:all .3s;width:100%;justify-content:center}
+.foot-wa-btn:hover{background:#1ebe5d}
+.foot-bottom{border-top:1px solid rgba(247,242,234,.06);padding-top:36px;display:flex;align-items:center;justify-content:space-between;font-size:.75rem;color:rgba(247,242,234,.25)}
+
+/* ══════ FLOATING WA ══════ */
+.wa-float{position:fixed;bottom:36px;right:36px;z-index:800}
+.wa-fab{width:62px;height:62px;background:var(--wa);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.7rem;text-decoration:none;box-shadow:0 8px 32px rgba(37,211,102,.45);animation:waPulse 2.5s ease-in-out infinite;transition:transform .3s;cursor:pointer}
+.wa-fab:hover{transform:scale(1.12)}
+.wa-tooltip{position:absolute;right:76px;top:50%;transform:translateY(-50%);background:var(--dark2);color:var(--gold);font-size:.72rem;letter-spacing:1.5px;font-weight:600;padding:10px 16px;white-space:nowrap;border:1px solid rgba(212,168,67,.2);opacity:0;transition:all .3s;pointer-events:none}
+.wa-float:hover .wa-tooltip{opacity:1;right:80px}
+@keyframes waPulse{0%,100%{box-shadow:0 8px 32px rgba(37,211,102,.45)}50%{box-shadow:0 8px 32px rgba(37,211,102,.7),0 0 0 12px rgba(37,211,102,.07)}}
+
+/* ══════ RESPONSIVE ══════ */
+@media(max-width:1024px){
+  .hero-content{padding:0 48px;max-width:640px}
+  .hero-side{display:none}
+  .why{padding:80px 48px;grid-template-columns:1fr;gap:60px}
+  .collections{padding:0 48px 80px}
+  .cta-band{margin:0 48px 80px;padding:60px;grid-template-columns:1fr}
+  .gallery-hero-text{padding:0 48px 48px}
+  .gallery-body{padding:48px 48px 80px}
+  footer{padding:70px 48px 40px}
+  .foot-grid{grid-template-columns:1fr 1fr;gap:48px}
+  .coll-grid.tv{grid-template-columns:1fr 1fr;grid-template-rows:260px 260px 220px}
+  .coll-item.span2{grid-row:unset}
+}
+@media(max-width:768px){
+  nav{padding:18px 24px}
+  nav.scrolled{padding:12px 24px}
+  .nav-menu,.nav-wa{display:none}
+  .ham{display:flex}
+  .hero-content{padding:0 24px;max-width:100%}
+  .hero-h1{font-size:2.6rem}
+  .hero-scroll{left:24px;bottom:32px}
+  .why{padding:60px 24px}
+  .why-cards{grid-template-columns:1fr}
+  .collections{padding:0 24px 60px}
+  .coll-grid.tv,.coll-grid.kitchen,.coll-grid.wall{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .coll-item.span2{grid-row:unset}
+  .cta-band{margin:0 24px 60px;padding:40px 28px}
+  .gallery-hero-text{padding:0 24px 40px}
+  .gallery-body{padding:40px 24px 60px}
+  .gallery-grid{grid-template-columns:1fr}
+  footer{padding:60px 24px 36px}
+  .foot-grid{grid-template-columns:1fr;gap:36px}
+  .foot-bottom{flex-direction:column;gap:12px;text-align:center}
+  .wa-float{bottom:20px;right:20px}
+}
+@media(max-width:480px){
+  .hero-h1{font-size:2rem}
+  .coll-grid.tv,.coll-grid.kitchen,.coll-grid.wall{grid-template-columns:1fr}
+  .gallery-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cur" id="cur"></div>
+<div class="cur2" id="cur2"></div>
+
+<!-- LOADER -->
+<div class="loader" id="loader">
+  <div class="loader-logo">LEON</div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nav-logo" onclick="show('home')">LEON BUSINESS</a>
+  <ul class="nav-menu" id="navMenu">
+    <li><a class="active" onclick="show('home',this)">Home</a></li>
+    <li><a onclick="show('tv',this)">TV Showcase</a></li>
+    <li><a onclick="show('kitchen',this)">Kitchen</a></li>
+    <li><a onclick="show('wall',this)">Wall Decor</a></li>
+  </ul>
+  <a class="nav-wa btn" href="https://wa.me/255744304485?text=Hello%20LEON%20BUSINESS!%20I%20have%20an%20idea%20I%27d%20like%20to%20discuss." target="_blank"><i class="fab fa-whatsapp"></i> Share Idea</a>
+  <div class="ham" id="ham" onclick="toggleMob()"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mob-nav" id="mobNav">
+  <a onclick="show('home');toggleMob()">Home</a>
+  <a onclick="show('tv');toggleMob()">TV Showcase</a>
+  <a onclick="show('kitchen');toggleMob()">Kitchen</a>
+  <a onclick="show('wall');toggleMob()">Wall Decor</a>
+</div>
+
+<!-- ══ HOME PAGE ══ -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg">
+      <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=1800&q=85" alt="Premium furniture">
+    </div>
+    <div class="hero-content">
+      <div class="hero-tag">Premium Furniture · Dar es Salaam, Tanzania</div>
+      <h1 class="hero-h1">Your Dream Space,<br><span>Masterfully Crafted</span></h1>
+      <p class="hero-p">We design and build bespoke TV showcases, kitchen cabinetry, and wall decorations that transform your home into a statement of refined taste.</p>
+      <div class="hero-btns">
+        <a class="btn btn-gold" href="https://wa.me/255744304485?text=Hello%20LEON%20BUSINESS!%20I%27d%20like%20to%20share%20my%20furniture%20idea%20and%20get%20a%20quote." target="_blank"><i class="fab fa-whatsapp"></i> Share Your Idea Now</a>
+        <button class="btn btn-outline" onclick="show('tv')">Explore Collections</button>
+      </div>
+    </div>
+    <div class="hero-side">
+      <div class="hero-stat"><div class="hero-stat-n">15+</div><div class="hero-stat-l">Years</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">500+</div><div class="hero-stat-l">Projects</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">100%</div><div class="hero-stat-l">Satisfied</div></div>
+    </div>
+    <div class="hero-scroll"><div class="scroll-line"></div>Scroll</div>
+  </section>
+
+  <!-- CINEMATIC IMAGE REEL -->
+  <section class="reel-section" id="reelSection">
+    <div class="reel-header">
+      <span class="overline">Every Detail, Masterfully Crafted</span>
+      <h2>Our Work <em>Speaks</em> for Itself</h2>
+      <p>Hover any piece to enquire — or browse our full collections below.</p>
+    </div>
+
+    <div class="reel-rows">
+    <!-- ── ROW 1 → LEFT fast (TV + Kitchen mix, tall cards) ── -->
+    <div class="reel-track go-left" style="--dur:38s" id="r1">
+      <div class="rc tall" onclick="show('tv')"><img src="IMG-20251225-WA0006.jpg" alt="Floating Console"><span class="rc-cat tv">TV Showcase</span><div class="rc-panel"><h4>Floating Console</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Floating%20Console.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">01</span></div>
+      <div class="rc wide" onclick="show('kitchen')"><img src="kIMG-20250709-WA0027.jpg" alt="Luxury Island"><span class="rc-cat kit">Kitchen</span><div class="rc-panel"><h4>Luxury Kitchen Island</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Luxury%20Kitchen%20Island.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">02</span></div>
+      <div class="rc tall" onclick="show('wall')"><img src="wIMG_20251002_220434.jpg" alt="3D Panels"><span class="rc-cat wall">Wall Decor</span><div class="rc-panel"><h4>3D Geometric Panels</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%203D%20Geometric%20Panels.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">03</span></div>
+      <div class="rc sq" onclick="show('tv')"><img src="IMG-20251225-WA0007.jpg" alt="Entertainment Wall"><span class="rc-cat tv">TV Showcase</span><div class="rc-panel"><h4>Entertainment Wall System</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Entertainment%20Wall%20System.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">04</span></div>
+      <div class="rc wide" onclick="show('kitchen')"><img src="kIMG-20200201-WA0006.jpg" alt="Contemporary Kitchen"><span class="rc-cat kit">Kitchen</span><div class="rc-panel"><h4>Contemporary Kitchen</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Contemporary%20Kitchen.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">05</span></div>
+      <div class="rc tall" onclick="show('wall')"><img src="wIMG_20251002_220531.jpg" alt="Metallic Wall"><span class="rc-cat wall">Wall Decor</span><div class="rc-panel"><h4>Metallic Accent Wall</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Metallic%20Accent%20Wall.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">06</span></div>
+      <div class="rc sq" onclick="show('tv')"><img src="IMG-20251225-WA0010.jpg" alt="Premium Center"><span class="rc-cat tv">TV Showcase</span><div class="rc-panel"><h4>Premium Entertainment Center</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Premium%20Entertainment%20Center.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">07</span></div>
+      <div class="rc wide" onclick="show('kitchen')"><img src="kIMG_20241025_200507.jpg" alt="High Gloss"><span class="rc-cat kit">Kitchen</span><div class="rc-panel"><h4>High Gloss Finish Kitchen</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20High%20Gloss%20Kitchen.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">08</span></div>
+      <!-- duplicate for seamless -->
+      <div class="rc tall" onclick="show('tv')"><img src="IMG-20251225-WA0006.jpg" alt="Floating Console"><span class="rc-cat tv">TV Showcase</span><div class="rc-panel"><h4>Floating Console</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Floating%20Console.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">01</span></div>
+      <div class="rc wide" onclick="show('kitchen')"><img src="kIMG-20250709-WA0027.jpg" alt="Luxury Island"><span class="rc-cat kit">Kitchen</span><div class="rc-panel"><h4>Luxury Kitchen Island</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Luxury%20Kitchen%20Island.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">02</span></div>
+      <div class="rc tall" onclick="show('wall')"><img src="wIMG_20251002_220434.jpg" alt="3D Panels"><span class="rc-cat wall">Wall Decor</span><div class="rc-panel"><h4>3D Geometric Panels</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%203D%20Geometric%20Panels.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">03</span></div>
+      <div class="rc sq" onclick="show('tv')"><img src="IMG-20251225-WA0007.jpg" alt="Entertainment Wall"><span class="rc-cat tv">TV Showcase</span><div class="rc-panel"><h4>Entertainment Wall System</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Entertainment%20Wall%20System.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">04</span></div>
+      <div class="rc wide" onclick="show('kitchen')"><img src="kIMG-20200201-WA0006.jpg" alt="Contemporary Kitchen"><span class="rc-cat kit">Kitchen</span><div class="rc-panel"><h4>Contemporary Kitchen</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Contemporary%20Kitchen.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">05</span></div>
+      <div class="rc tall" onclick="show('wall')"><img src="wIMG_20251002_220531.jpg" alt="Metallic Wall"><span class="rc-cat wall">Wall Decor</span><div class="rc-panel"><h4>Metallic Accent Wall</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Metallic%20Accent%20Wall.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">06</span></div>
+      <div class="rc sq" onclick="show('tv')"><img src="IMG-20251225-WA0010.jpg" alt="Premium Center"><span class="rc-cat tv">TV Showcase</span><div class="rc-panel"><h4>Premium Entertainment Center</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Premium%20Entertainment%20Center.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">07</span></div>
+      <div class="rc wide" onclick="show('kitchen')"><img src="kIMG_20241025_200507.jpg" alt="High Gloss"><span class="rc-cat kit">Kitchen</span><div class="rc-panel"><h4>High Gloss Finish Kitchen</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20High%20Gloss%20Kitchen.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">08</span></div>
+    </div>
+
+    <!-- ── ROW 2 → RIGHT slow (Wall + TV mix, wide cards) ── -->
+    <div class="reel-track go-right" style="--dur:52s" id="r2">
+      <div class="rc wide" onclick="show('wall')"><img src="wIMG_20251002_220445.jpg" alt="Wall Murals"><span class="rc-cat wall">Wall Decor</span><div class="rc-panel"><h4>Bespoke Wall Murals</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20Bespoke%20Wall%20Murals.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">09</span></div>
+      <div class="rc tall" onclick="show('tv')"><img src="IMG-20251225-WA0009.jpg" alt="Classic Wooden"><span class="rc-cat tv">TV Showcase</span><div class="rc-panel"><h4>Classic Wooden Showcase</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Classic%20Wooden%20Showcase.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">10</span></div>
+      <div class="rc sq" onclick="show('kitchen')"><img src="kIMG-20200524-WA0003.jpg" alt="Classic Wood Kitchen"><span class="rc-cat kit">Kitchen</span><div class="rc-panel"><h4>Classic Wood Kitchen</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Classic%20Wood%20Kitchen.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">11</span></div>
+      <div class="rc wide" onclick="show('wall')"><img src="wIMG_20251002_220458.jpg" alt="Wood Wall"><span class="rc-cat wall">Wall Decor</span><div class="rc-panel"><h4>Natural Wood Feature Wall</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Natural%20Wood%20Wall.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">12</span></div>
+      <div class="rc tall" onclick="show('tv')"><img src="IMG-20251225-WA0012.jpg" alt="Sleek Console"><span class="rc-cat tv">TV Showcase</span><div class="rc-panel"><h4>Sleek Media Console</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Sleek%20Media%20Console.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">13</span></div>
+      <div class="rc sq" onclick="show('kitchen')"><img src="kIMG_20241129_172344.jpg" alt="Integrated Storage"><span class="rc-cat kit">Kitchen</span><div class="rc-panel"><h4>Integrated Storage</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20Integrated%20Kitchen%20Storage.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">14</span></div>
+      <div class="rc wide" onclick="show('wall')"><img src="wIMG_20251002_220523.jpg" alt="Patterned Wall"><span class="rc-cat wall">Wall Decor</span><div class="rc-panel"><h4>Patterned Wall Designs</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20Patterned%20Wall%20Designs.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">15</span></div>
+      <div class="rc tall" onclick="show('tv')"><img src="IMG-20251225-WA0013.jpg" alt="Wall Mounted"><span class="rc-cat tv">TV Showcase</span><div class="rc-panel"><h4>Wall Mounted TV Unit</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Wall%20Mounted%20TV%20Unit.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">16</span></div>
+      <!-- duplicate -->
+      <div class="rc wide" onclick="show('wall')"><img src="wIMG_20251002_220445.jpg" alt="Wall Murals"><span class="rc-cat wall">Wall Decor</span><div class="rc-panel"><h4>Bespoke Wall Murals</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20Bespoke%20Wall%20Murals.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">09</span></div>
+      <div class="rc tall" onclick="show('tv')"><img src="IMG-20251225-WA0009.jpg" alt="Classic Wooden"><span class="rc-cat tv">TV Showcase</span><div class="rc-panel"><h4>Classic Wooden Showcase</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Classic%20Wooden%20Showcase.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">10</span></div>
+      <div class="rc sq" onclick="show('kitchen')"><img src="kIMG-20200524-WA0003.jpg" alt="Classic Wood Kitchen"><span class="rc-cat kit">Kitchen</span><div class="rc-panel"><h4>Classic Wood Kitchen</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Classic%20Wood%20Kitchen.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">11</span></div>
+      <div class="rc wide" onclick="show('wall')"><img src="wIMG_20251002_220458.jpg" alt="Wood Wall"><span class="rc-cat wall">Wall Decor</span><div class="rc-panel"><h4>Natural Wood Feature Wall</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Natural%20Wood%20Wall.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">12</span></div>
+      <div class="rc tall" onclick="show('tv')"><img src="IMG-20251225-WA0012.jpg" alt="Sleek Console"><span class="rc-cat tv">TV Showcase</span><div class="rc-panel"><h4>Sleek Media Console</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Sleek%20Media%20Console.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">13</span></div>
+      <div class="rc sq" onclick="show('kitchen')"><img src="kIMG_20241129_172344.jpg" alt="Integrated Storage"><span class="rc-cat kit">Kitchen</span><div class="rc-panel"><h4>Integrated Storage</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20Integrated%20Kitchen%20Storage.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">14</span></div>
+      <div class="rc wide" onclick="show('wall')"><img src="wIMG_20251002_220523.jpg" alt="Patterned Wall"><span class="rc-cat wall">Wall Decor</span><div class="rc-panel"><h4>Patterned Wall Designs</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20Patterned%20Wall%20Designs.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">15</span></div>
+      <div class="rc tall" onclick="show('tv')"><img src="IMG-20251225-WA0013.jpg" alt="Wall Mounted"><span class="rc-cat tv">TV Showcase</span><div class="rc-panel"><h4>Wall Mounted TV Unit</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Wall%20Mounted%20TV%20Unit.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">16</span></div>
+    </div>
+
+    <!-- ── ROW 3 → LEFT medium (Kitchen + Wall + TV, sq cards) ── -->
+    <div class="reel-track go-left" style="--dur:45s" id="r3">
+      <div class="rc sq" onclick="show('kitchen')"><img src="kIMG-20250707-WA0004.jpg" alt="Smart Modular"><span class="rc-cat kit">Kitchen</span><div class="rc-panel"><h4>Smart Modular Kitchen</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Smart%20Modular%20Kitchen.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">17</span></div>
+      <div class="rc wide" onclick="show('wall')"><img src="wIMG_20251002_220507.jpg" alt="Modern Wall"><span class="rc-cat wall">Wall Decor</span><div class="rc-panel"><h4>Modern Wall Treatment</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20Modern%20Wall%20Treatment.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">18</span></div>
+      <div class="rc tall" onclick="show('tv')"><img src="IMG-20251225-WA0014.jpg" alt="Rustic Cabinet"><span class="rc-cat tv">TV Showcase</span><div class="rc-panel"><h4>Rustic Style Cabinet</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Rustic%20Style%20Cabinet.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">19</span></div>
+      <div class="rc sq" onclick="show('kitchen')"><img src="kIMG_20241129_172325.jpg" alt="Two-Tone Kitchen"><span class="rc-cat kit">Kitchen</span><div class="rc-panel"><h4>Two-Tone Design</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Two-Tone%20Kitchen.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">20</span></div>
+      <div class="rc wide" onclick="show('wall')"><img src="wIMG_20251002_220516.jpg" alt="Textured Wall"><span class="rc-cat wall">Wall Decor</span><div class="rc-panel"><h4>Textured Finish Walls</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20Textured%20Wall%20Finish.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">21</span></div>
+      <div class="rc tall" onclick="show('tv')"><img src="IMG-20251225-WA0015.jpg" alt="Minimalist Stand"><span class="rc-cat tv">TV Showcase</span><div class="rc-panel"><h4>Minimalist TV Stand</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Minimalist%20TV%20Stand.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">22</span></div>
+      <div class="rc sq" onclick="show('kitchen')"><img src="kIMG_20240828_170750.jpg" alt="Smart Pantry"><span class="rc-cat kit">Kitchen</span><div class="rc-panel"><h4>Smart Pantry System</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Smart%20Pantry%20System.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">23</span></div>
+      <div class="rc wide" onclick="show('wall')"><img src="wIMG_20251002_220543.jpg" alt="Stone Wall"><span class="rc-cat wall">Wall Decor</span><div class="rc-panel"><h4>Stone Feature Wall</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Stone%20Feature%20Wall.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">24</span></div>
+      <!-- duplicate -->
+      <div class="rc sq" onclick="show('kitchen')"><img src="kIMG-20250707-WA0004.jpg" alt="Smart Modular"><span class="rc-cat kit">Kitchen</span><div class="rc-panel"><h4>Smart Modular Kitchen</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Smart%20Modular%20Kitchen.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">17</span></div>
+      <div class="rc wide" onclick="show('wall')"><img src="wIMG_20251002_220507.jpg" alt="Modern Wall"><span class="rc-cat wall">Wall Decor</span><div class="rc-panel"><h4>Modern Wall Treatment</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20Modern%20Wall%20Treatment.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">18</span></div>
+      <div class="rc tall" onclick="show('tv')"><img src="IMG-20251225-WA0014.jpg" alt="Rustic Cabinet"><span class="rc-cat tv">TV Showcase</span><div class="rc-panel"><h4>Rustic Style Cabinet</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Rustic%20Style%20Cabinet.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">19</span></div>
+      <div class="rc sq" onclick="show('kitchen')"><img src="kIMG_20241129_172325.jpg" alt="Two-Tone Kitchen"><span class="rc-cat kit">Kitchen</span><div class="rc-panel"><h4>Two-Tone Design</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Two-Tone%20Kitchen.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">20</span></div>
+      <div class="rc wide" onclick="show('wall')"><img src="wIMG_20251002_220516.jpg" alt="Textured Wall"><span class="rc-cat wall">Wall Decor</span><div class="rc-panel"><h4>Textured Finish Walls</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20Textured%20Wall%20Finish.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">21</span></div>
+      <div class="rc tall" onclick="show('tv')"><img src="IMG-20251225-WA0015.jpg" alt="Minimalist Stand"><span class="rc-cat tv">TV Showcase</span><div class="rc-panel"><h4>Minimalist TV Stand</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Minimalist%20TV%20Stand.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">22</span></div>
+      <div class="rc sq" onclick="show('kitchen')"><img src="kIMG_20240828_170750.jpg" alt="Smart Pantry"><span class="rc-cat kit">Kitchen</span><div class="rc-panel"><h4>Smart Pantry System</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Smart%20Pantry%20System.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">23</span></div>
+      <div class="rc wide" onclick="show('wall')"><img src="wIMG_20251002_220543.jpg" alt="Stone Wall"><span class="rc-cat wall">Wall Decor</span><div class="rc-panel"><h4>Stone Feature Wall</h4><a class="wa-chip" href="https://wa.me/255744304485?text=Hello!%20I%27m%20interested%20in%20the%20Stone%20Feature%20Wall.%20Let%27s%20discuss%21" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire Now</a></div><span class="rc-num">24</span></div>
+    </div>
+    </div><!-- end reel-rows -->
+  </section>
+    <!-- WHY -->
+  <section class="why">
+    <div class="why-left">
+      <div class="overline">Why Choose Leon Business</div>
+      <h2>We Don't Just Build Furniture.<br>We Build <em>Experiences.</em></h2>
+      <p>Every piece we craft is the result of decades of mastery, premium materials, and an obsessive attention to the details that make a house feel like a home.</p>
+      <a class="btn btn-gold" href="https://wa.me/255744304485?text=Hello%20LEON%20BUSINESS!%20I%27d%20like%20a%20free%20consultation." target="_blank"><i class="fab fa-whatsapp"></i> Free Consultation</a>
+    </div>
+    <div class="why-cards">
+      <div class="why-card"><i class="fas fa-drafting-compass"></i><h3>Fully Custom</h3><p>Every piece is designed from scratch to fit your exact space and vision — no compromises.</p></div>
+      <div class="why-card"><i class="fas fa-hammer"></i><h3>Expert Craftsmen</h3><p>Skilled artisans with 15+ years of mastery combine traditional and modern techniques.</p></div>
+      <div class="why-card"><i class="fas fa-gem"></i><h3>Premium Materials</h3><p>Only the finest woods, metals, and finishes — built to last generations, not years.</p></div>
+      <div class="why-card"><i class="fas fa-shipping-fast"></i><h3>On-Time Delivery</h3><p>We respect your time. Every project is delivered on schedule, installed with precision.</p></div>
+    </div>
+  </section>
+
+  <!-- TV COLLECTION -->
+  <section class="collections">
+    <div class="section-head">
+      <h2>TV <em>Showcase</em> Collection</h2>
+      <span class="see-all" onclick="show('tv')">View All →</span>
+    </div>
+    <div class="coll-grid tv">
+      <div class="coll-item span2" onclick="show('tv')"><div class="coll-badge">Featured</div><img src="IMG-20251225-WA0006.jpg" alt="Floating Console"><div class="coll-item-overlay"></div><div class="coll-item-info"><h4>Floating Console</h4><p>Minimalist LED showcase</p></div></div>
+      <div class="coll-item" onclick="show('tv')"><img src="IMG-20251225-WA0007.jpg" alt="Wall System"><div class="coll-item-overlay"></div><div class="coll-item-info"><h4>Wall System</h4><p>Full entertainment wall</p></div></div>
+      <div class="coll-item" onclick="show('tv')"><img src="IMG-20251225-WA0008.jpg" alt="Corner Unit"><div class="coll-item-overlay"></div><div class="coll-item-info"><h4>Corner Unit</h4><p>Space-smart design</p></div></div>
+      <div class="coll-item" onclick="show('tv')"><img src="IMG-20251225-WA0009.jpg" alt="Classic Wooden"><div class="coll-item-overlay"></div><div class="coll-item-info"><h4>Classic Wooden</h4><p>Hand-carved details</p></div></div>
+      <div class="coll-item" onclick="show('tv')"><img src="IMG-20251225-WA0010.jpg" alt="Premium Center"><div class="coll-item-overlay"></div><div class="coll-item-info"><h4>Premium Center</h4><p>Glass & wood luxury</p></div></div>
+    </div>
+  </section>
+
+  <!-- KITCHEN COLLECTION -->
+  <section class="collections" style="padding-top:0">
+    <div class="section-head">
+      <h2>Kitchen <em>Cabinetry</em></h2>
+      <span class="see-all" onclick="show('kitchen')">View All →</span>
+    </div>
+    <div class="coll-grid kitchen">
+      <div class="coll-item" onclick="show('kitchen')"><img src="kIMG-20200201-WA0006.jpg" alt="Contemporary"><div class="coll-item-overlay"></div><div class="coll-item-info"><h4>Contemporary</h4><p>Handle-less modern</p></div></div>
+      <div class="coll-item" onclick="show('kitchen')"><img src="kIMG-20200524-WA0003.jpg" alt="Classic Wood"><div class="coll-item-overlay"></div><div class="coll-item-info"><h4>Classic Wood</h4><p>Warm solid wood</p></div></div>
+      <div class="coll-item span2" onclick="show('kitchen')"><div class="coll-badge">Popular</div><img src="kIMG-20250709-WA0027.jpg" alt="Luxury Island"><div class="coll-item-overlay"></div><div class="coll-item-info"><h4>Luxury Island</h4><p>Premium countertops</p></div></div>
+      <div class="coll-item" onclick="show('kitchen')"><img src="kIMG-20250707-WA0004.jpg" alt="Smart Modular"><div class="coll-item-overlay"></div><div class="coll-item-info"><h4>Smart Modular</h4><p>Space-saving design</p></div></div>
+      <div class="coll-item" onclick="show('kitchen')"><img src="kIMG_20241025_200507.jpg" alt="High Gloss"><div class="coll-item-overlay"></div><div class="coll-item-info"><h4>High Gloss</h4><p>Reflective surfaces</p></div></div>
+    </div>
+  </section>
+
+  <!-- WALL COLLECTION -->
+  <section class="collections" style="padding-top:0">
+    <div class="section-head">
+      <h2>Wall <em>Decoration</em></h2>
+      <span class="see-all" onclick="show('wall')">View All →</span>
+    </div>
+    <div class="coll-grid wall">
+      <div class="coll-item" onclick="show('wall')"><div class="coll-badge">3D</div><img src="wIMG_20251002_220434.jpg" alt="3D Panels"><div class="coll-item-overlay"></div><div class="coll-item-info"><h4>3D Geometric</h4><p>Add depth & texture</p></div></div>
+      <div class="coll-item" onclick="show('wall')"><img src="wIMG_20251002_220445.jpg" alt="Murals"><div class="coll-item-overlay"></div><div class="coll-item-info"><h4>Bespoke Murals</h4><p>Custom focal points</p></div></div>
+      <div class="coll-item" onclick="show('wall')"><img src="wIMG_20251002_220458.jpg" alt="Wood Wall"><div class="coll-item-overlay"></div><div class="coll-item-info"><h4>Natural Wood</h4><p>Sustainable warmth</p></div></div>
+      <div class="coll-item" onclick="show('wall')"><img src="wIMG_20251002_220507.jpg" alt="Modern Wall"><div class="coll-item-overlay"></div><div class="coll-item-info"><h4>Modern Treatment</h4><p>Contemporary finish</p></div></div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <div class="cta-band">
+    <div>
+      <div class="overline">Start Your Project Today</div>
+      <h2>Have an Idea? Let's Build It Together.</h2>
+      <p>From the first sketch to the final installation, we handle everything. Tell us your vision on WhatsApp and our team will respond within the hour with expert guidance and a free quote.</p>
+    </div>
+    <div class="cta-right">
+      <a class="cta-wa" href="https://wa.me/255744304485?text=Hello%20LEON%20BUSINESS!%20I%20have%20a%20furniture%20idea%20I%27d%20like%20to%20discuss.%20Can%20we%20get%20started%3F" target="_blank">
+        <i class="fab fa-whatsapp cta-wa-icon"></i>
+        <div class="cta-wa-text">
+          <strong>Chat on WhatsApp Now</strong>
+          <span>+255 744 304 485 · Replies within 1 hour</span>
+        </div>
+      </a>
+      <div class="cta-process">
+        <div class="process-step"><div class="process-step-n">01</div><div><strong>Share Your Idea</strong><p>Send us a photo, sketch, or simply describe what you want.</p></div></div>
+        <div class="process-step"><div class="process-step-n">02</div><div><strong>Get a Free Quote</strong><p>We'll design your piece and send a detailed quote within 24hrs.</p></div></div>
+        <div class="process-step"><div class="process-step-n">03</div><div><strong>We Build & Install</strong><p>Our craftsmen build and install your dream furniture.</p></div></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end home -->
+
+<!-- ══ TV PAGE ══ -->
+<div class="page" id="page-tv">
+  <div class="gallery-hero">
+    <img src="IMG-20251225-WA0006.jpg" alt="TV Showcase">
+    <div class="gallery-hero-text">
+      <div class="tag">Collection</div>
+      <h1>TV Showcase</h1>
+      <p>Entertainment centers that become the centerpiece of your living room.</p>
+    </div>
+  </div>
+  <div class="gallery-body">
+    <div class="gallery-grid" id="tv-grid"></div>
+  </div>
+</div>
+
+<!-- ══ KITCHEN PAGE ══ -->
+<div class="page" id="page-kitchen">
+  <div class="gallery-hero">
+    <img src="kIMG-20250709-WA0027.jpg" alt="Kitchen">
+    <div class="gallery-hero-text">
+      <div class="tag">Collection</div>
+      <h1>Kitchen Cabinetry</h1>
+      <p>Custom kitchen solutions that combine beauty with daily practicality.</p>
+    </div>
+  </div>
+  <div class="gallery-body">
+    <div class="gallery-grid" id="kitchen-grid"></div>
+  </div>
+</div>
+
+<!-- ══ WALL PAGE ══ -->
+<div class="page" id="page-wall">
+  <div class="gallery-hero">
+    <img src="wIMG_20251002_220434.jpg" alt="Wall Decor">
+    <div class="gallery-hero-text">
+      <div class="tag">Collection</div>
+      <h1>Wall Decoration</h1>
+      <p>Transformative wall treatments that turn blank walls into design statements.</p>
+    </div>
+  </div>
+  <div class="gallery-body">
+    <div class="gallery-grid" id="wall-grid"></div>
+  </div>
+</div>
+
+<!-- FOOTER (always shown) -->
+<footer>
+  <div class="foot-grid">
+    <div>
+      <div class="foot-logo">LEON BUSINESS</div>
+      <div class="foot-tagline">"Transforming spaces, enhancing lives<br>through premium furniture."</div>
+      <p style="font-size:.85rem;color:rgba(247,242,234,.4);line-height:1.7">Premium furniture solutions crafted with passion and precision in Dar es Salaam, Tanzania. We bring your vision to life.</p>
+      <div class="foot-socials">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-pinterest"></i></a>
+        <a href="https://wa.me/255744304485" target="_blank"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div>
+      <div class="foot-h">Navigate</div>
+      <ul class="foot-list">
+        <li><a onclick="show('home')">Home</a></li>
+        <li><a onclick="show('tv')">TV Showcase</a></li>
+        <li><a onclick="show('kitchen')">Kitchen</a></li>
+        <li><a onclick="show('wall')">Wall Decoration</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="foot-h">Contact Us</div>
+      <ul class="foot-list foot-contact">
+        <li><i class="fas fa-map-marker-alt"></i>Dar es Salaam, Tanzania</li>
+        <li><i class="fab fa-whatsapp"></i>+255 744 304 485</li>
+        <li><i class="fas fa-envelope"></i>info@leonbusiness.co.tz</li>
+        <li><i class="fas fa-clock"></i>Mon–Sat: 8AM – 6PM</li>
+      </ul>
+      <div class="foot-wa-box">
+        <p>Got an idea? Share it with us on WhatsApp — we'll turn it into reality.</p>
+        <a class="foot-wa-btn" href="https://wa.me/255744304485?text=Hello%20LEON%20BUSINESS!%20I%20have%20a%20furniture%20idea%20for%20you." target="_blank">
+          <i class="fab fa-whatsapp"></i> Share Your Idea
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2025 LEON BUSINESS — Premium Furniture · All Rights Reserved</span>
+    <span>Dar es Salaam, Tanzania 🇹🇿</span>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb">
+  <button class="lb-x" onclick="closeLb()"><i class="fas fa-times"></i></button>
+  <div class="lb-ctr" id="lbCtr">1 / 1</div>
+  <div class="lb-nav">
+    <button class="lb-btn" onclick="lbNav(-1)"><i class="fas fa-chevron-left"></i></button>
+    <button class="lb-btn" onclick="lbNav(1)"><i class="fas fa-chevron-right"></i></button>
+  </div>
+  <img class="lb-img" id="lbImg" src="" alt="">
+  <div class="lb-info">
+    <h3 id="lbTitle"></h3>
+    <p id="lbDesc"></p>
+    <a class="lb-wa" id="lbWa" href="#" target="_blank"><i class="fab fa-whatsapp"></i> Enquire About This Piece</a>
+  </div>
+</div>
+
+<!-- FLOATING WA -->
+<div class="wa-float">
+  <span class="wa-tooltip">Share Your Idea</span>
+  <a class="wa-fab" href="https://wa.me/255744304485?text=Hello%20LEON%20BUSINESS!%20I%20have%20a%20furniture%20idea%20I%27d%20like%20to%20discuss%20with%20you%20%F0%9F%9B%8B%EF%B8%8F" target="_blank"><i class="fab fa-whatsapp"></i></a>
+</div>
+
+<script>
+// ── DATA ──
+const WA = '255744304485';
+const enc = t => encodeURIComponent(`Hello LEON BUSINESS! I love your "${t}" and I'd like to enquire about getting one. Can we discuss? 🛋️`);
+
+const data = {
+  tv:[
+    {src:'IMG-20251225-WA0006.jpg',t:'Floating TV Console',d:'Minimalist floating unit with integrated LED lighting and smart storage for contemporary living rooms.'},
+    {src:'IMG-20251225-WA0007.jpg',t:'Entertainment Wall System',d:'Full wall system with display shelves, concealed storage, and professional cable management.'},
+    {src:'IMG-20251225-WA0008.jpg',t:'Space-Smart Corner Unit',d:'Innovative corner solutions that maximize unused space with elegant display areas.'},
+    {src:'IMG-20251225-WA0009.jpg',t:'Classic Wooden Showcase',d:'Traditional showcases with hand-carved details and rich finishes for timeless warmth.'},
+    {src:'IMG-20251225-WA0010.jpg',t:'Premium Entertainment Center',d:'High-end unit featuring premium wood, glass accents, and smart media compartments.'},
+    {src:'IMG-20251225-WA0012.jpg',t:'Sleek Media Console',d:'Streamlined design with hidden storage for a clean, clutter-free aesthetic.'},
+    {src:'IMG-20251225-WA0013.jpg',t:'Wall Mounted TV Unit',d:'Space-saving wall mounted design that floats above the floor, enhancing room size.'},
+    {src:'IMG-20251225-WA0014.jpg',t:'Rustic Style Cabinet',d:'Distressed wood with metal accents — perfect farmhouse or loft statement piece.'},
+    {src:'IMG-20251225-WA0015.jpg',t:'Modern Minimalist Stand',d:'Clean lines with hidden compartments for a clutter-free entertainment experience.'},
+  ],
+  kitchen:[
+    {src:'kIMG-20200201-WA0006.jpg',t:'Contemporary Kitchen',d:'Modern handle-less cabinets with sleek surfaces and intelligent storage solutions.'},
+    {src:'kIMG-20200524-WA0003.jpg',t:'Classic Wood Kitchen',d:'Solid wood cabinets with decorative molding and warm, inviting traditional finishes.'},
+    {src:'kIMG-20250707-WA0004.jpg',t:'Smart Modular Kitchen',d:'Pull-out organizers, corner solutions, and space-saving designs for effortless cooking.'},
+    {src:'kIMG-20250709-WA0027.jpg',t:'Luxury Kitchen Island',d:'Premium countertops with integrated appliances and a breakfast bar centerpiece.'},
+    {src:'kIMG_20240828_170750.jpg',t:'Smart Pantry System',d:'Custom pull-out pantry shelves with every item beautifully accessible and organized.'},
+    {src:'kIMG_20241025_200507.jpg',t:'High Gloss Finish Kitchen',d:'Contemporary high-gloss cabinets that reflect light for a bright, spacious feel.'},
+    {src:'kIMG_20241129_172344.jpg',t:'Integrated Storage Kitchen',d:'Clever spice racks, cutlery organizers, and appliance garages for clear countertops.'},
+    {src:'kIMG_20241129_172325.jpg',t:'Two-Tone Kitchen Design',d:'Trendy two-tone combination creating a dynamic and personalized kitchen aesthetic.'},
+    {src:'kIMG_20240828_170809.jpg',t:'Corner Cabinet Solutions',d:'Rotating shelves and pull-out systems turning wasted corners into prime storage.'},
+  ],
+  wall:[
+    {src:'wIMG_20251002_220434.jpg',t:'3D Geometric Panels',d:'Stunning 3D panels adding depth, texture, and contemporary style to any interior.'},
+    {src:'wIMG_20251002_220445.jpg',t:'Bespoke Wall Murals',d:'Custom murals transforming blank walls into captivating personal focal points.'},
+    {src:'wIMG_20251002_220458.jpg',t:'Natural Wood Feature Wall',d:'Sustainably sourced wood bringing nature indoors with warm, cozy atmosphere.'},
+    {src:'wIMG_20251002_220507.jpg',t:'Modern Wall Treatments',d:'Contemporary finishes using innovative materials for minimalist design styles.'},
+    {src:'wIMG_20251002_220516.jpg',t:'Textured Finish Walls',d:'Unique textured treatments creating visual interest and sophisticated ambiance.'},
+    {src:'wIMG_20251002_220523.jpg',t:'Patterned Wall Designs',d:'Intricate geometric or organic patterns adding character and artistic flair.'},
+    {src:'wIMG_20251002_220531.jpg',t:'Metallic Accent Walls',d:'Luxurious metallic finishes adding shimmer and sophistication to statement walls.'},
+    {src:'wIMG_20251002_220543.jpg',t:'Stone Feature Walls',d:'Natural or stone-effect walls bringing rustic charm and timeless elegance.'},
+    {src:'wIMG_20251002_220548.jpg',t:'Minimalist Wall Design',d:'Clean, simple treatments emphasizing space and light for serene living.'},
+  ]
+};
+
+// ── RENDER GALLERIES ──
+function buildGrid(key){
+  const el=document.getElementById(key+'-grid');
+  if(!el||el.children.length)return;
+  data[key].forEach((item,i)=>{
+    el.innerHTML+=`<div class="g-card" onclick="openLb('${key}',${i})">
+      <img class="g-card-img" src="${item.src}" alt="${item.t}" loading="lazy">
+      <div class="g-card-body">
+        <h3>${item.t}</h3>
+        <p>${item.d}</p>
+        <div class="g-card-footer">
+          <a class="g-wa" href="https://wa.me/${WA}?text=${enc(item.t)}" target="_blank" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i> Enquire</a>
+          <button class="g-view" onclick="event.stopPropagation();openLb('${key}',${i})"><i class="fas fa-expand"></i></button>
+        </div>
+      </div>
+    </div>`;
+  });
+}
+
+// ── SECTION NAV ──
+function show(id, linkEl){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-menu a').forEach(a=>a.classList.remove('active'));
+  if(linkEl) linkEl.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id!=='home') buildGrid(id);
+}
+
+// ── MOBILE NAV ──
+function toggleMob(){
+  document.getElementById('mobNav').classList.toggle('open');
+}
+
+// ── LIGHTBOX ──
+let lbKey='',lbIdx=0;
+function openLb(key,idx){
+  lbKey=key;lbIdx=idx;updateLb();
+  document.getElementById('lb').classList.add('on');
+  document.body.style.overflow='hidden';
+}
+function updateLb(){
+  const arr=data[lbKey],item=arr[lbIdx];
+  document.getElementById('lbImg').src=item.src;
+  document.getElementById('lbImg').alt=item.t;
+  document.getElementById('lbTitle').textContent=item.t;
+  document.getElementById('lbDesc').textContent=item.d;
+  document.getElementById('lbCtr').textContent=`${lbIdx+1} / ${arr.length}`;
+  document.getElementById('lbWa').href=`https://wa.me/${WA}?text=${enc(item.t)}`;
+}
+function closeLb(){document.getElementById('lb').classList.remove('on');document.body.style.overflow='';}
+function lbNav(d){lbIdx=(lbIdx+d+data[lbKey].length)%data[lbKey].length;updateLb();}
+document.getElementById('lb').addEventListener('click',e=>{if(e.target===document.getElementById('lb'))closeLb();});
+document.addEventListener('keydown',e=>{
+  const lb=document.getElementById('lb');
+  if(!lb.classList.contains('on'))return;
+  if(e.key==='Escape')closeLb();
+  if(e.key==='ArrowLeft')lbNav(-1);
+  if(e.key==='ArrowRight')lbNav(1);
+});
+
+// ── CUSTOM CURSOR ──
+const cur=document.getElementById('cur'),cur2=document.getElementById('cur2');
+let mx=0,my=0,cx=0,cy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function anim(){cx+=(mx-cx)*.14;cy+=(my-cy)*.14;cur2.style.left=cx+'px';cur2.style.top=cy+'px';requestAnimationFrame(anim);})();
+
+// ── NAV SCROLL ──
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>60);
+});
+
+// ── 3D TILT on reel cards ──
+document.addEventListener('mousemove', e => {
+  document.querySelectorAll('.rc').forEach(card => {
+    const rect = card.getBoundingClientRect();
+    if (rect.top > window.innerHeight || rect.bottom < 0) return;
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = (e.clientX - cx) / (rect.width / 2);
+    const dy = (e.clientY - cy) / (rect.height / 2);
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    if (dist < 1.4) {
+      const rx = -dy * 10;
+      const ry = dx * 10;
+      card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.04)`;
+    } else {
+      card.style.transform = '';
+    }
+  });
+});
+
+// ── LOADER ──
+window.addEventListener('load',()=>{
+  setTimeout(()=>document.getElementById('loader').classList.add('done'),2000);
+});
+</script>
+</body>
+</html>
